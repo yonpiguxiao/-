@@ -1,19 +1,25 @@
 package com.seven.system.test.domain;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 @TableName("tb_test")
 public class TestDomain {
-    private Integer testId;
+
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long testId;
+
     private String title;
+
     private String content;
 
-    public Integer getTestId() {
+    public Long getTestId() {
         return testId;
     }
 
-    public void setTestId(Integer testId) {
+    public void setTestId(Long testId) {
         this.testId = testId;
     }
 

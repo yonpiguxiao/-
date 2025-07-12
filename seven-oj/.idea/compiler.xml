@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="oj-judge" />
         <module name="oj-system" />
+        <module name="oj-common-core" />
         <module name="oj-job" />
         <module name="oj-friend" />
       </profile>
@@ -15,6 +16,8 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="oj-common" options="-parameters" />
+      <module name="oj-common-core" options="-parameters" />
       <module name="oj-friend" options="-parameters" />
       <module name="oj-job" options="-parameters" />
       <module name="oj-judge" options="-parameters" />
