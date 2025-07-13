@@ -26,6 +26,11 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.seven</groupId>
+            <artifactId>oj-common-swagger</artifactId>
+            <version>${oj-common-swagger.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
