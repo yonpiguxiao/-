@@ -1,10 +1,11 @@
 package com.seven.system.test;
 
+import com.seven.common.core.domain.R;
+import com.seven.common.core.enums.ResultCode;
+import com.seven.system.test.domain.LoginTestDTO;
 import com.seven.system.test.service.ITestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +23,23 @@ public class TestController {
     @GetMapping("/add")
     public String add() {
         return testService.add();
+    }
+
+    @GetMapping("/apifoxtest")
+    public R<String> apiFoxTest(String apiId) {
+        R<String> result = new R<>();
+        result.setCode(ResultCode.SUCCESS.getCode());
+        result.setMsg(ResultCode.SUCCESS.getMsg());
+        result.setData("apxfoxtest:" + apiId);
+        return result;
+    }
+
+    @PostMapping("/apifoxPost")
+    public R<String> apiFoxPost(@RequestBody LoginTestDTO loginTestDTO) {
+        R<String> result = new R<>();
+        result.setCode(ResultCode.SUCCESS.getCode());
+        result.setMsg(ResultCode.SUCCESS.getMsg());
+        result.setData("apxfoxtest:" + loginTestDTO.getUserAccount() + ":" + loginTestDTO.getPassword());
+        return result;
     }
 }

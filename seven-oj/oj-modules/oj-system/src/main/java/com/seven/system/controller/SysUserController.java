@@ -53,7 +53,6 @@ public class SysUserController {
         return null;
     }
 
-    //修改我就不演⽰了和新增差不多
 
     @Operation(summary = "⽤⼾详情", description = "根据查询条件查询⽤⼾详情")
     @GetMapping("/detail")
