@@ -8,6 +8,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modules>
         <module>oj-modules</module>
         <module>oj-common</module>
+        <module>oj-gateway</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
