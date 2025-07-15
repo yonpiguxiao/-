@@ -4,6 +4,7 @@ import com.seven.common.core.domain.R;
 import com.seven.common.core.enums.ResultCode;
 import com.seven.system.test.domain.LoginTestDTO;
 import com.seven.system.test.service.ITestService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/test")
+@Slf4j
 public class TestController {
     @Autowired
     private ITestService testService;
@@ -41,5 +43,12 @@ public class TestController {
         result.setMsg(ResultCode.SUCCESS.getMsg());
         result.setData("apxfoxtest:" + loginTestDTO.getUserAccount() + ":" + loginTestDTO.getPassword());
         return result;
+    }
+
+    @GetMapping("/log")
+    public String log() {
+        log.info("我是 info");
+        log.error("我是 error");
+        return "日志测试";
     }
 }
