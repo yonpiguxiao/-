@@ -2,6 +2,8 @@ package com.seven.system.test;
 
 import com.seven.common.core.domain.R;
 import com.seven.common.core.enums.ResultCode;
+import com.seven.common.redis.service.RedisService;
+import com.seven.system.domain.SysUser;
 import com.seven.system.test.domain.LoginTestDTO;
 import com.seven.system.test.service.ITestService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,9 @@ import java.util.List;
 public class TestController {
     @Autowired
     private ITestService testService;
+
+    @Autowired
+    private RedisService redisService;
 
     @GetMapping("/list")
     public List<?> list() {
@@ -50,5 +55,14 @@ public class TestController {
         log.info("我是 info");
         log.error("我是 error");
         return "日志测试";
+    }
+
+    @GetMapping("/redisAddAndGet")
+    public String redisAddAndGet() {
+        SysUser sysUser = new SysUser();
+        sysUser.setUserAccount("redisTest");
+        redisService.setCacheObject("u", sysUser);
+        SysUser us = redisService.getCacheObject("u", SysUser.class);
+        return us.toString();
     }
 }
