@@ -36,7 +36,7 @@ public class SysUserServiceImpl implements ISysUserService {
         if(BCryptUtils.matchesPassword(password, sysUser.getPassword())) {
             Map<String, Object> claims = new HashMap<>();
             claims.put("userId", sysUser.getUserId());
-            JwtUtils.createToken(claims, );
+            JwtUtils.createToken(claims, secret);
             return R.ok();
         }
         return R.fail(ResultCode.FAILED_LOGIN);
