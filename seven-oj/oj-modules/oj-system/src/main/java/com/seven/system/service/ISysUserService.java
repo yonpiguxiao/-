@@ -4,5 +4,5 @@ import com.seven.common.core.domain.R;
 import com.seven.system.controller.LoginResult;
 
 public interface ISysUserService {
-    R<Void> login(String userAccount, String password);
+    R<String> login(String userAccount, String password);
 }
