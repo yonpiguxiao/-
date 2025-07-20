@@ -1,1 +1,2 @@
-com.seven.common.security.GlobalExceptionHandler
+com.seven.common.security.handler.GlobalExceptionHandler
+com.seven.common.security.service.TokenService

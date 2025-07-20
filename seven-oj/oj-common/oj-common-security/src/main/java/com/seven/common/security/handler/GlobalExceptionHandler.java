@@ -1,4 +1,4 @@
-package com.seven.common.security;
+package com.seven.common.security.handler;
 import com.seven.common.core.domain.R;
 import com.seven.common.core.enums.ResultCode;
 import jakarta.servlet.http.HttpServletRequest;
