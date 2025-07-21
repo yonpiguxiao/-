@@ -44,9 +44,18 @@ public class RedisService {
      * @param unit 时间单位
      * @return true=设置成功；false=设置失败
      */
-    public boolean expire(final String key, final long timeout, final TimeUnit
-            unit) {
+    public boolean expire(final String key, final long timeout, final TimeUnit unit) {
         return redisTemplate.expire(key, timeout, unit);
+    }
+
+    /**
+     * 获取剩余有效时间
+     * @param key Redis键
+     * @param unit 时间单位
+     * @return
+     */
+    public Long getExpire(final String key, final TimeUnit unit) {
+        return redisTemplate.getExpire(key, unit);
     }
 
     /**

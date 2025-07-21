@@ -1,2 +1,4 @@
 com.seven.common.security.handler.GlobalExceptionHandler
 com.seven.common.security.service.TokenService
+com.seven.common.security.config.WebMvcConfig
+com.seven.common.security.interceptor.TokenInterceptor

@@ -83,6 +83,8 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (url.contains(HttpConstants.FRIEND_URL_PREFIX) && !UserIdentity.ORDINARY.getValue().equals(user.getIdentity())) {
             return unauthorizedResponse(exchange, "令牌验证失败");
         }
+
+
         return chain.filter(exchange);
     }
 
