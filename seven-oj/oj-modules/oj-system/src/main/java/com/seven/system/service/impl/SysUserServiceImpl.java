@@ -1,12 +1,14 @@
 package com.seven.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.seven.common.core.domain.R;
 import com.seven.common.core.enums.ResultCode;
 import com.seven.common.core.enums.UserIdentity;
-import com.seven.common.redis.service.RedisService;
+import com.seven.common.security.exception.ServiceException;
 import com.seven.common.security.service.TokenService;
 import com.seven.system.domain.SysUser;
+import com.seven.system.domain.SysUserSaveDTO;
 import com.seven.system.mapper.SysUserMapper;
 import com.seven.system.service.ISysUserService;
 import com.seven.system.utils.BCryptUtils;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RefreshScope
@@ -41,5 +44,18 @@ public class SysUserServiceImpl implements ISysUserService {
             return R.ok(tokenService.createToken(sysUser.getUserId(), secret, UserIdentity.ADMIN.getValue()));
         }
         return R.fail(ResultCode.FAILED_LOGIN);
+    }
+
+    @Override
+    public int add(SysUserSaveDTO sysUserSaveDTO) {
+        List<SysUser> sysUserList = sysUserMapper.selectList(new LambdaQueryWrapper<SysUser>()
+                .eq(SysUser::getUserAccount, sysUserSaveDTO.getUserAccount()));
+        if (CollectionUtil.isNotEmpty(sysUserList)) {
+            throw new ServiceException(ResultCode.AILED_USER_EXISTS);
+        }
+        SysUser sysUser = new SysUser();
+        sysUser.setUserAccount(sysUserSaveDTO.getUserAccount());
+        sysUser.setPassword(BCryptUtils.encryptPassword(sysUserSaveDTO.getPassword()));
+        return sysUserMapper.insert(sysUser);
     }
 }

@@ -50,5 +50,11 @@
             <artifactId>oj-common-security</artifactId>
             <version>${oj-common-security.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.seven</groupId>
+            <artifactId>oj-common-mybatis</artifactId>
+            <version>${oj-common-mybatis.version}</version>
+        </dependency>
     </dependencies>
 </project>
