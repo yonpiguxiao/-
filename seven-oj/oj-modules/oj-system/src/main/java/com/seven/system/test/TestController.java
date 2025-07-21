@@ -5,9 +5,11 @@ import com.seven.common.core.enums.ResultCode;
 import com.seven.common.redis.service.RedisService;
 import com.seven.system.domain.SysUser;
 import com.seven.system.test.domain.LoginTestDTO;
+import com.seven.system.test.domain.ValidationDTO;
 import com.seven.system.test.service.ITestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,5 +66,10 @@ public class TestController {
         redisService.setCacheObject("u", sysUser);
         SysUser us = redisService.getCacheObject("u", SysUser.class);
         return us.toString();
+    }
+
+    @GetMapping("/validation")
+    public String validation(@Validated ValidationDTO validationDTO) {
+        return "参数测试";
     }
 }
