@@ -28,24 +28,23 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import { loginService } from '@/apis/suser'
-    import router from '@/router'
-    import { setToken } from '@/utils/cookie'
-    const userAccount = ref('')
-    const password = ref('')
-    async function loginFun() {
+import { ref } from 'vue'
+import { loginService } from '@/apis/suser'
+import router from '@/router'
+import { setToken } from '@/utils/cookie'
+const userAccount = ref('')
+const password = ref('')
+async function loginFun() {
+    try {
         const loginResult = await loginService(userAccount.value, password.value)
         console.log("loginResult:", loginResult)
-        if(loginResult.data.code == 1000) {
-            console.log("登录成功")
-            router.push("/oj/system")
-            setToken(loginResult.data.data)
-        } else {
-            console.log("登录失败")
-            ElMessage.error(loginResult.data.msg)
-        }
+        router.push("/oj/layout")
+        setToken(loginResult.data)
     }
+    catch (error) {
+        console.error("error:", error)
+    }
+}
 </script>
 
 <style lang="scss" scoped>
