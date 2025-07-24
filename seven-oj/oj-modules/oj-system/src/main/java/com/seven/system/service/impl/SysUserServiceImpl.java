@@ -2,7 +2,9 @@ package com.seven.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.seven.common.core.domain.LoginUser;
 import com.seven.common.core.domain.R;
+import com.seven.common.core.domain.vo.LoginUserVO;
 import com.seven.common.core.enums.ResultCode;
 import com.seven.common.core.enums.UserIdentity;
 import com.seven.common.security.exception.ServiceException;
@@ -35,13 +37,13 @@ public class SysUserServiceImpl implements ISysUserService {
     public R<String> login(String userAccount, String password) {
         //通过账号查询,对应的用户信息
         SysUser sysUser = sysUserMapper.selectOne(new LambdaQueryWrapper<SysUser>()
-                .select(SysUser::getPassword, SysUser::getUserId)
+                .select(SysUser::getPassword, SysUser::getUserId, SysUser::getNickName)
                 .eq(SysUser::getUserAccount, userAccount));
         if(sysUser == null) {
             return R.fail(ResultCode.FAILED_USER_NOT_EXISTS);
         }
         if(BCryptUtils.matchesPassword(password, sysUser.getPassword())) {
-            return R.ok(tokenService.createToken(sysUser.getUserId(), secret, UserIdentity.ADMIN.getValue()));
+            return R.ok(tokenService.createToken(sysUser.getUserId(), secret, UserIdentity.ADMIN.getValue(), sysUser.getNickName()));
         }
         return R.fail(ResultCode.FAILED_LOGIN);
     }
@@ -57,5 +59,16 @@ public class SysUserServiceImpl implements ISysUserService {
         sysUser.setUserAccount(sysUserSaveDTO.getUserAccount());
         sysUser.setPassword(BCryptUtils.encryptPassword(sysUserSaveDTO.getPassword()));
         return sysUserMapper.insert(sysUser);
+    }
+
+    @Override
+    public R<LoginUserVO> info(String token) {
+        LoginUser loginUser = tokenService.getLoginUser(token, secret);
+        if(loginUser == null) {
+            return R.fail();
+        }
+        LoginUserVO loginUserVO = new LoginUserVO();
+        loginUserVO.setNickName(loginUser.getNickName());
+        return R.ok(loginUserVO);
     }
 }

@@ -12,6 +12,8 @@ public class SysUser extends BaseEntity {
     @TableId(type = IdType.ASSIGN_ID)
     private Long userId; //不再使用auto_increment
 
+    private String nickName;
+
     private String userAccount;
 
     private String password;

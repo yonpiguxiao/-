@@ -1,7 +1,10 @@
 package com.seven.system.controller;
 
 import com.seven.common.core.Controller.BaseController;
+import com.seven.common.core.constants.HttpConstants;
+import com.seven.common.core.domain.LoginUser;
 import com.seven.common.core.domain.R;
+import com.seven.common.core.domain.vo.LoginUserVO;
 import com.seven.system.domain.LoginDTO;
 import com.seven.system.domain.SysUserSaveDTO;
 import com.seven.system.domain.SysUserVO;
@@ -32,6 +35,12 @@ public class SysUserController extends BaseController {
     public R<String> login(@RequestBody LoginDTO loginDTO) {
         return sysUserService.login(loginDTO.getUserAccount(), loginDTO.getPassword());
     }
+
+    @GetMapping("/info")
+    public R<LoginUserVO> info(@RequestHeader(HttpConstants.AUTHENTICATION) String token) {
+        return sysUserService.info(token);
+    }
+
 
     @PostMapping("/add")
     @Operation(summary = "新增管理员", description = "根据提供的信息新增管理员")
