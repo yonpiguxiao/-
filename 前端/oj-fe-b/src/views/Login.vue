@@ -17,7 +17,7 @@
                 </div>
                 <div class="form-item">
                     <img src="../assets/images/yanzhengma.png">
-                    <el-input v-model="password" placeholder="请输⼊密码" />
+                    <el-input v-model="password"  type="password" show-password placeholder="请输⼊密码" />
                 </div>
                 <div class="submit-box" @click="loginFun">
                     登录

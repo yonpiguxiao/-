@@ -1,7 +1,9 @@
 package com.seven.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.seven.common.core.constants.HttpConstants;
 import com.seven.common.core.domain.LoginUser;
 import com.seven.common.core.domain.R;
 import com.seven.common.core.domain.vo.LoginUserVO;
@@ -49,6 +51,14 @@ public class SysUserServiceImpl implements ISysUserService {
     }
 
     @Override
+    public boolean logout(String token) {
+        if (StrUtil.isNotEmpty(token) && token.startsWith(HttpConstants.PREFIX)) {
+            token = token.replaceFirst(HttpConstants.PREFIX, StrUtil.EMPTY);
+        }
+        return tokenService.deleteLoginUser(token, secret);
+    }
+
+    @Override
     public int add(SysUserSaveDTO sysUserSaveDTO) {
         List<SysUser> sysUserList = sysUserMapper.selectList(new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getUserAccount, sysUserSaveDTO.getUserAccount()));
@@ -63,6 +73,9 @@ public class SysUserServiceImpl implements ISysUserService {
 
     @Override
     public R<LoginUserVO> info(String token) {
+        if (StrUtil.isNotEmpty(token) && token.startsWith(HttpConstants.PREFIX)) {
+            token = token.replaceFirst(HttpConstants.PREFIX, StrUtil.EMPTY);
+        }
         LoginUser loginUser = tokenService.getLoginUser(token, secret);
         if(loginUser == null) {
             return R.fail();
@@ -71,4 +84,6 @@ public class SysUserServiceImpl implements ISysUserService {
         loginUserVO.setNickName(loginUser.getNickName());
         return R.ok(loginUserVO);
     }
+
+
 }

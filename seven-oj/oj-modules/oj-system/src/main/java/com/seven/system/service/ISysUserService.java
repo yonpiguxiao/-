@@ -7,7 +7,10 @@ import com.seven.system.domain.SysUserSaveDTO;
 public interface ISysUserService {
     R<String> login(String userAccount, String password);
 
+    boolean logout(String token);
+
     int add(SysUserSaveDTO sysUserSaveDTO);
 
     R<LoginUserVO> info(String token);
+
 }
