@@ -3,7 +3,7 @@ package com.seven.system.test;
 import com.seven.common.core.domain.R;
 import com.seven.common.core.enums.ResultCode;
 import com.seven.common.redis.service.RedisService;
-import com.seven.system.domain.SysUser;
+import com.seven.system.domain.sysuser.SysUser;
 import com.seven.system.test.domain.LoginTestDTO;
 import com.seven.system.test.domain.ValidationDTO;
 import com.seven.system.test.service.ITestService;

@@ -1,4 +1,4 @@
-package com.seven.system.service.impl;
+package com.seven.system.service.sysuser.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,10 +11,10 @@ import com.seven.common.core.enums.ResultCode;
 import com.seven.common.core.enums.UserIdentity;
 import com.seven.common.security.exception.ServiceException;
 import com.seven.common.security.service.TokenService;
-import com.seven.system.domain.SysUser;
-import com.seven.system.domain.SysUserSaveDTO;
-import com.seven.system.mapper.SysUserMapper;
-import com.seven.system.service.ISysUserService;
+import com.seven.system.domain.sysuser.SysUser;
+import com.seven.system.domain.sysuser.dto.SysUserSaveDTO;
+import com.seven.system.mapper.sysuser.SysUserMapper;
+import com.seven.system.service.sysuser.ISysUserService;
 import com.seven.system.utils.BCryptUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

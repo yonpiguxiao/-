@@ -1,4 +1,4 @@
-package com.seven.system.domain;
+package com.seven.system.domain.sysuser.dto;
 
 import lombok.Data;
 

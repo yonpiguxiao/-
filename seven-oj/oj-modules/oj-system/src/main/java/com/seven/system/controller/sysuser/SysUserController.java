@@ -1,14 +1,13 @@
-package com.seven.system.controller;
+package com.seven.system.controller.sysuser;
 
 import com.seven.common.core.Controller.BaseController;
 import com.seven.common.core.constants.HttpConstants;
-import com.seven.common.core.domain.LoginUser;
 import com.seven.common.core.domain.R;
 import com.seven.common.core.domain.vo.LoginUserVO;
-import com.seven.system.domain.LoginDTO;
-import com.seven.system.domain.SysUserSaveDTO;
-import com.seven.system.domain.SysUserVO;
-import com.seven.system.service.ISysUserService;
+import com.seven.system.domain.sysuser.dto.LoginDTO;
+import com.seven.system.domain.sysuser.dto.SysUserSaveDTO;
+import com.seven.system.domain.sysuser.vo.SysUserVO;
+import com.seven.system.service.sysuser.ISysUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;

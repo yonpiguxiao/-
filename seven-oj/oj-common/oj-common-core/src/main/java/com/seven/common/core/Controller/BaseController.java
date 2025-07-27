@@ -1,6 +1,11 @@
 package com.seven.common.core.Controller;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.github.pagehelper.PageInfo;
 import com.seven.common.core.domain.R;
+import com.seven.common.core.domain.TableDataInfo;
+
+import java.util.List;
 
 
 public class BaseController {
@@ -10,5 +15,12 @@ public class BaseController {
 
     public R<Void> toR(boolean result) {
         return result ? R.ok() : R.fail();
+    }
+
+    public TableDataInfo getTableDataInfo(List<?> list) {
+        if(CollectionUtil.isEmpty(list)) {
+            return TableDataInfo.empty();
+        }
+        return TableDataInfo.success(list, new PageInfo<>(list).getTotal());
     }
 }
