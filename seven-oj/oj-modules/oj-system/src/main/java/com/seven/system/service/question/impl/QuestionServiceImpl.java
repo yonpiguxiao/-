@@ -1,13 +1,19 @@
 package com.seven.system.service.question.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import com.seven.common.core.domain.TableDataInfo;
+import com.seven.common.core.enums.ResultCode;
+import com.seven.common.security.exception.ServiceException;
+import com.seven.system.domain.question.Question;
+import com.seven.system.domain.question.dto.QuestionAddDTO;
+import com.seven.system.domain.question.dto.QuestionEditDTO;
 import com.seven.system.domain.question.dto.QuestionQueryDTO;
+import com.seven.system.domain.question.vo.QuestionDetailVO;
 import com.seven.system.domain.question.vo.QuestionVO;
 import com.seven.system.mapper.question.QuestionMapper;
 import com.seven.system.service.question.IQuestionService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +28,53 @@ public class QuestionServiceImpl implements IQuestionService {
     public List<QuestionVO> list(QuestionQueryDTO questionQueryDTO) {
         PageHelper.startPage(questionQueryDTO.getPageNum(), questionQueryDTO.getPageSize());
         return questionMapper.selectQuestionList(questionQueryDTO);
+    }
+
+    @Override
+    public int add(QuestionAddDTO questionAddDTO) {
+        List<Question> questionList = questionMapper.selectList(new LambdaQueryWrapper<Question>().eq(Question::getTitle, questionAddDTO.getTitle()));
+        if(CollectionUtil.isNotEmpty(questionList)) {
+            throw new ServiceException(ResultCode.FAILED_ALREADY_EXISTS);
+        }
+        Question question = new Question();
+        BeanUtils.copyProperties(questionAddDTO, question);
+        return questionMapper.insert(question);
+    }
+
+    @Override
+    public QuestionDetailVO detail(Long questionId) {
+        Question question = questionMapper.selectById(questionId);
+        if(question == null) {
+            throw new ServiceException(ResultCode.FAILED_NOT_EXISTS);
+        }
+        QuestionDetailVO questionDetailVO = new QuestionDetailVO();
+        BeanUtils.copyProperties(question, questionDetailVO);
+        return questionDetailVO;
+    }
+
+    @Override
+    public int edit(QuestionEditDTO questionEditDTO) {
+        Question oldQuestion = questionMapper.selectById(questionEditDTO.getQuestionId());
+        if(oldQuestion == null) {
+            throw new ServiceException(ResultCode.FAILED_ALREADY_EXISTS);
+        }
+        oldQuestion.setQuestionCase(questionEditDTO.getQuestionCase());
+        oldQuestion.setContent(questionEditDTO.getContent());
+        oldQuestion.setDifficulty(questionEditDTO.getDifficulty());
+        oldQuestion.setDefaultCode(questionEditDTO.getDefaultCode());
+        oldQuestion.setMainFunc(questionEditDTO.getMainFunc());
+        oldQuestion.setSpaceLimit(questionEditDTO.getSpaceLimit());
+        oldQuestion.setTimeLimit(questionEditDTO.getTimeLimit());
+        oldQuestion.setTitle(questionEditDTO.getTitle());
+        return questionMapper.updateById(oldQuestion);
+    }
+
+    @Override
+    public int delete(Long questionId) {
+        Question question = questionMapper.selectById(questionId);
+        if(question == null) {
+            throw new ServiceException(ResultCode.FAILED_NOT_EXISTS);
+        }
+        return questionMapper.deleteById(questionId);
     }
 }
