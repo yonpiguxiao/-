@@ -9,7 +9,7 @@
         <el-form-item>
             <el-button plain @Click="onSearch">搜索</el-button>
             <el-button plain type="info" @Click="onReset">重置</el-button>
-            <el-button plain type="primary" :icon="Plus">添加题⽬</el-button>
+            <el-button plain type="primary" :icon="Plus" @Click="onAddQuestion">添加题⽬</el-button>
         </el-form-item>
     </el-form>
     <el-table height="526px" :data="questionList">
@@ -26,22 +26,24 @@
         <el-table-column prop="createTime" label="创建时间" width="180px" />
         <el-table-column label="操作" width="100px" fixed="right">
             <template #default="{ row }">
-                <el-button type="text">编辑
+                <el-button type="text" @Click="onEdit(row.questionId)">编辑
                 </el-button>
-                <el-button type="text" class="red">删除
+                <el-button type="text" class="red" @Click="onDelete(row.questionId)">删除
                 </el-button>
             </template>
         </el-table-column>
-    </el-table>
+    </el-table> 
     <el-pagination background size="small" layout="total, sizes, prev, pager, next, jumper" :total="total"  
     v-model:current-page="params.pageNum"  v-model:page-size="params.pageSize"
     :page-sizes="[5, 10, 20, 30]" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+    <question-drawer ref="questionDrawerRef" @success="onSuccess"></question-drawer>
 </template>
 <script setup>
 import { Plus } from "@element-plus/icons-vue"
 import Selector from "@/components/QuestionSelector.vue"
-import { getQuestionListService } from "@/apis/question";
+import { getQuestionListService, delQuestionService } from "@/apis/question";
 import { reactive, ref } from "vue";
+import QuestionDrawer from "@/components/QuestionDrawer.vue";
 
 const params = reactive({
     pageNum: 1,
@@ -52,6 +54,7 @@ const params = reactive({
 
 const questionList = ref([])
 const total = ref(0)
+
 
 async function getQuestionList() {
     const result = await getQuestionListService(params)
@@ -83,5 +86,28 @@ function onReset() {
     params.title = ''
     params.difficulty = ''
     getQuestionList()
+}
+
+const questionDrawerRef = ref()
+
+function onAddQuestion() {
+    questionDrawerRef.value.open()
+}
+
+function onSuccess(service) {
+  if (service === 'add') {
+    params.pageNum = 1
+  }
+  getQuestionList()
+}
+
+async function onEdit(questionId) {
+    questionDrawerRef.value.open(questionId)
+}
+
+async function onDelete(questionId) {
+    await delQuestionService(questionId)
+    params.pageNum = 1
+    getQuestionList()  
 }
 </script>

@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueup/vue-quill": "^1.2.0",
+    "ace-builds": "^1.4.13",
     "axios": "^1.10.0",
     "element-plus": "^2.10.4",
     "js-cookie": "^3.0.5",

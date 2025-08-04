@@ -9,7 +9,7 @@
             tq.title,
             tq.difficulty,
             ts.nick_name as create_name,
-            ts.create_time
+            tq.create_time
         FROM
             tb_question tq
         left join
