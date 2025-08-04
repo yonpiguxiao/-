@@ -2,6 +2,8 @@ import axios from 'axios'
 import { getToken, removeToken } from './cookie';
 import { ElMessage } from 'element-plus';
 
+axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8"
+
 //不同的功能 通过axios请求不同的接口地址
 const service = axios.create({
     baseURL: "/dev-api",
