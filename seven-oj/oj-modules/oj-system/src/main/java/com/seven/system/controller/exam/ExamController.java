@@ -7,8 +7,11 @@ import com.seven.common.core.domain.TableDataInfo;
 import com.seven.common.core.enums.ResultCode;
 import com.seven.common.security.exception.ServiceException;
 import com.seven.system.domain.exam.dto.ExamAddDTO;
+import com.seven.system.domain.exam.dto.ExamEditDTO;
 import com.seven.system.domain.exam.dto.ExamQueryDTO;
 import com.seven.system.domain.exam.dto.ExamQuestionAddDTO;
+import com.seven.system.domain.exam.vo.ExamDetailVO;
+import com.seven.system.domain.exam.vo.ExamVO;
 import com.seven.system.service.exam.IExamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +31,29 @@ public class ExamController extends BaseController {
     }
 
     @PostMapping("/add")
-    public R<Void> add(@RequestBody ExamAddDTO examAddDTO) {
-        return toR(examService.add(examAddDTO));
+    public R<String> add(@RequestBody ExamAddDTO examAddDTO) {
+        return R.ok(examService.add(examAddDTO));
     }
 
     @PostMapping("/question/add")
     public R<Void> questionAdd(@RequestBody ExamQuestionAddDTO examQuestionAddDTO) {
         return toR(examService.questionAdd(examQuestionAddDTO));
     }
+
+    @DeleteMapping("/question/delete")
+    public R<Void> questionDelete(Long examId, Long questionId) {
+        return toR(examService.questionDelete(examId, questionId));
+    }
+
+    @GetMapping("/detail")
+    public R<ExamDetailVO> detail(Long examId) {
+        return R.ok(examService.detail(examId));
+    }
+
+    @PutMapping("/edit")
+    public R<Void> edit(@RequestBody ExamEditDTO examEditDTO) {
+        return toR(examService.edit(examEditDTO));
+    }
+
+
 }

@@ -133,7 +133,7 @@ function onReset() {
 
 function onAddExam() {
   //跳转到新的页面上   
-  router.push("/oj/layout/updateExam?type=add")
+  router.push("/oj/layout/updateExam?type=add") 
 }
 
 async function onEdit(examId) {

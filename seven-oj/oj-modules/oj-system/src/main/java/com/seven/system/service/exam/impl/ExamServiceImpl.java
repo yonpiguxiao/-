@@ -1,5 +1,6 @@
 package com.seven.system.service.exam.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -9,10 +10,13 @@ import com.seven.common.security.exception.ServiceException;
 import com.seven.system.domain.exam.Exam;
 import com.seven.system.domain.exam.ExamQuestion;
 import com.seven.system.domain.exam.dto.ExamAddDTO;
+import com.seven.system.domain.exam.dto.ExamEditDTO;
 import com.seven.system.domain.exam.dto.ExamQueryDTO;
 import com.seven.system.domain.exam.dto.ExamQuestionAddDTO;
+import com.seven.system.domain.exam.vo.ExamDetailVO;
 import com.seven.system.domain.exam.vo.ExamVO;
 import com.seven.system.domain.question.Question;
+import com.seven.system.domain.question.vo.QuestionVO;
 import com.seven.system.mapper.exam.ExamMapper;
 import com.seven.system.mapper.exam.ExamQuestionMapper;
 import com.seven.system.mapper.question.QuestionMapper;
@@ -43,25 +47,20 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
     }
 
     @Override
-    public int add(ExamAddDTO examAddDTO) {
-        List<Exam> examList = examMapper.selectList(new LambdaQueryWrapper<Exam>().eq(Exam::getTitle, examAddDTO.getTitle()));
-        if(CollectionUtil.isNotEmpty(examList)) {
-            throw new ServiceException(ResultCode.FAILED_ALREADY_EXISTS);
-        }
-        if(examAddDTO.getStartTime().isBefore(LocalDateTime.now())) {
-            throw new ServiceException(ResultCode.EXAM_START_TIME_BEFORE_CURRENT_TIME);
-        }
-        if(examAddDTO.getStartTime().isAfter(examAddDTO.getEndTime())) {
-            throw new ServiceException(ResultCode.EXAM_END_TIME_BEFORE_START_TIME);
-        }
+    public String add(ExamAddDTO examAddDTO) {
+        checkExamSaveParams(examAddDTO, null);
         Exam exam = new Exam();
         BeanUtils.copyProperties(examAddDTO, exam);
-        return examMapper.insert(exam);
+        examMapper.insert(exam);
+        return exam.getExamId().toString();
     }
+
+
 
     @Override
     public boolean questionAdd(ExamQuestionAddDTO examQuestionAddDTO) {
-        Exam exam = getExam(examQuestionAddDTO);
+        Exam exam = getExam(examQuestionAddDTO.getExamId());
+        checkExam(exam);
         Set<Long> questionIdSet = examQuestionAddDTO.getQuestionIdSet();
         if(CollectionUtil.isEmpty(questionIdSet)) {
             return true;
@@ -71,6 +70,71 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
             throw new ServiceException(ResultCode.EXAM_QUESTION_NOT_EXISTS);
         }
         return saveExamQuestion(exam, questionIdSet);
+    }
+
+    @Override
+    public int questionDelete(Long examId, Long questionId) {
+        Exam exam = getExam(examId);
+        checkExam(exam);
+        return examQuestionMapper.delete(new LambdaQueryWrapper<ExamQuestion>()
+                .eq(ExamQuestion::getExamId, examId)
+                .eq(ExamQuestion::getQuestionId, questionId));
+    }
+
+    @Override
+    public ExamDetailVO detail(Long examId) {
+        ExamDetailVO examDetailVO = new ExamDetailVO();
+        Exam exam = getExam(examId);
+        BeanUtil.copyProperties(exam, examDetailVO);
+        List<ExamQuestion> examQuestionList = examQuestionMapper.selectList(new LambdaQueryWrapper<ExamQuestion>()
+                .select(ExamQuestion::getQuestionId)
+                .eq(ExamQuestion::getExamId, examId)
+                .orderByAsc(ExamQuestion::getQuestionOrder));
+        if(CollectionUtil.isEmpty(examQuestionList)) {
+            return examDetailVO;
+        }
+        List<Long> questionIdList = examQuestionList.stream().map(ExamQuestion::getQuestionId).toList();
+        List<Question> questionList = questionMapper.selectList(new LambdaQueryWrapper<Question>()
+                .select(Question::getQuestionId, Question::getTitle, Question::getDifficulty)
+                .in(Question::getQuestionId, questionIdList));
+        List<QuestionVO> questionVOList = BeanUtil.copyToList(questionList, QuestionVO.class);
+        examDetailVO.setExamQuestionList(questionVOList);
+        return examDetailVO;
+    }
+
+    @Override
+    public int edit(ExamEditDTO examEditDTO) {
+        Exam exam = getExam(examEditDTO.getExamId());
+        checkExam(exam);
+        checkExamSaveParams(examEditDTO, examEditDTO.getExamId());
+        exam.setTitle(examEditDTO.getTitle());
+        exam.setStartTime(examEditDTO.getStartTime());
+        exam.setEndTime(examEditDTO.getEndTime());
+        return examMapper.updateById(exam);
+    }
+
+
+
+    private void checkExamSaveParams(ExamAddDTO examSaveDTO, Long examId) {
+        List<Exam> examList = examMapper
+                .selectList(new LambdaQueryWrapper<Exam>()
+                .eq(Exam::getTitle, examSaveDTO.getTitle())
+                .ne(examId != null, Exam::getExamId, examId));
+        if(CollectionUtil.isNotEmpty(examList)) {
+            throw new ServiceException(ResultCode.FAILED_ALREADY_EXISTS);
+        }
+        if(examSaveDTO.getStartTime().isBefore(LocalDateTime.now())) {
+            throw new ServiceException(ResultCode.EXAM_START_TIME_BEFORE_CURRENT_TIME);
+        }
+        if(examSaveDTO.getStartTime().isAfter(examSaveDTO.getEndTime())) {
+            throw new ServiceException(ResultCode.EXAM_END_TIME_BEFORE_START_TIME);
+        }
+    }
+
+    private void checkExam(Exam exam) {
+        if(exam.getStartTime().isBefore(LocalDateTime.now())) {
+            throw new ServiceException(ResultCode.EXAM_STARTED);
+        }
     }
 
     private boolean saveExamQuestion(Exam exam, Set<Long> questionIdSet) {
@@ -86,8 +150,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
         return saveBatch(examQuestionList);
     }
 
-    private Exam getExam(ExamQuestionAddDTO examQuestionAddDTO) {
-        Exam exam = examMapper.selectById(examQuestionAddDTO.getExamId());
+    private Exam getExam(Long examId) {
+        Exam exam = examMapper.selectById(examId);
         if(exam == null) {
             throw new ServiceException(ResultCode.EXAM_NOT_EXISTS);
         }

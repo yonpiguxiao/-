@@ -3,6 +3,8 @@ package com.seven.system.domain.question.dto;
 import com.seven.common.core.domain.PageQueryDTO;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class QuestionQueryDTO extends PageQueryDTO {
 
@@ -10,4 +12,7 @@ public class QuestionQueryDTO extends PageQueryDTO {
 
     private Integer difficulty;
 
+    private String excludeIdStr;   // ;
+
+    private Set<Long> excludeIdSet;
 }
