@@ -71,5 +71,21 @@ primary key(exam_question_id)
 
 
 
+--用户管理B端
+create table tb_user(
+user_id bigint unsigned not null comment '用户id(主键)',
+nick_name varchar(20) comment '用户昵称',
+phone char(11) comment '手机号',
+code char(6) comment '验证码',
+email varchar(20) comment '邮箱',
+wechat varchar(20) comment '微信号',
+introduce varchar(100) comment '个人简介',
+status tinyint not null comment '用户状态(0: 拉黑, 1: 正常)',
+primary key(user_id)
+)
+
+
+
+
 
 

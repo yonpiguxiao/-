@@ -5,6 +5,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.seven.common.core.constants.Constants;
 import com.seven.common.core.enums.ResultCode;
 import com.seven.common.security.exception.ServiceException;
 import com.seven.system.domain.exam.Exam;
@@ -81,6 +82,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
                 .eq(ExamQuestion::getQuestionId, questionId));
     }
 
+
+
     @Override
     public ExamDetailVO detail(Long examId) {
         ExamDetailVO examDetailVO = new ExamDetailVO();
@@ -113,7 +116,33 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
         return examMapper.updateById(exam);
     }
 
+    @Override
+    public int delete(Long examId) {
+        Exam exam = getExam(examId);
+        checkExam(exam);
+        examQuestionMapper.delete(new LambdaQueryWrapper<ExamQuestion>()
+                .eq(ExamQuestion::getExamId, examId));
+        return examMapper.deleteById(exam);
+    }
 
+    @Override
+    public int publish(Long examId) {
+        Exam exam = getExam(examId);
+        Long count = examQuestionMapper.selectCount(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, examId));
+        if(count == null || count <= 0) {
+            throw new ServiceException(ResultCode.EXAM_NOT_HAS_QUESTION);
+        }
+        exam.setStatus(Constants.TRUE);
+        return examMapper.updateById(exam);
+    }
+
+    @Override
+    public int cancelPublish(Long examId) {
+        Exam exam = getExam(examId);
+        checkExam(exam);
+        exam.setStatus(Constants.FALSE);
+        return examMapper.updateById(exam);
+    }
 
     private void checkExamSaveParams(ExamAddDTO examSaveDTO, Long examId) {
         List<Exam> examList = examMapper

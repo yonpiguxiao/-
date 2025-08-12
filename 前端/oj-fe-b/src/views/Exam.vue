@@ -147,16 +147,19 @@ async function onDelete(examId) {
   await delExamService(examId)
   params.pageNum = 1
   getExamList()
+  ElMessage.success('竞赛删除成功')
 }
 
 async function publishExam(examId) {
   await publishExamService(examId)
   getExamList()
+  ElMessage.success('竞赛发布成功')
 }
 
 async function cancelPublishExam(examId) {
   await cancelPublishExamService(examId)
   getExamList()
+  ElMessage.success('竞赛撤销发布成功')
 }
 
 </script>
