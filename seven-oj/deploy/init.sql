@@ -97,8 +97,8 @@ primary key(user_id)
 --C端竞赛报名:
 create table tb_user_exam(
 user_exam_id bigint unsigned not null comment '用户竞赛关系id',
-user_id big unsigned not null comment '用户id',
-exam_id big unsigned not null comment '竞赛id',
+user_id bigint unsigned not null comment '用户id',
+exam_id bigint unsigned not null comment '竞赛id',
 score int unsigned comment '分数',
 exam_rank int unsigned  comment '排名',
 create_by bigint unsigned not null comment '创建人',
