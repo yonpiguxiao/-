@@ -31,12 +31,15 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <oj-common-security.version>1.0-SNAPSHOT</oj-common-security.version>
         <oj-common-redis.version>1.0-SNAPSHOT</oj-common-redis.version>
         <oj-common-mybatis.version>1.0-SNAPSHOT</oj-common-mybatis.version>
+        <oj-common-message.version>1.0-SNAPSHOT</oj-common-message.version>
         <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
         <fastjson.version>2.0.43</fastjson.version>
         <jwt.version>0.9.1</jwt.version>
         <jaxb-api.version>2.4.0-b180830.0359</jaxb-api.version>
         <hutool-all.version>5.8.22</hutool-all.version>
         <pagehelper.boot.version>2.0.0</pagehelper.boot.version>
+        <dysmsapi.version>4.1.2</dysmsapi.version>
+        <xxl-job.version>2.4.0</xxl-job.version>
     </properties>
     <dependencies>
         <!-- bootstrap 启动器 -->

@@ -45,7 +45,7 @@ public class SysUserServiceImpl implements ISysUserService {
             return R.fail(ResultCode.FAILED_USER_NOT_EXISTS);
         }
         if(BCryptUtils.matchesPassword(password, sysUser.getPassword())) {
-            return R.ok(tokenService.createToken(sysUser.getUserId(), secret, UserIdentity.ADMIN.getValue(), sysUser.getNickName()));
+            return R.ok(tokenService.createToken(sysUser.getUserId(), secret, UserIdentity.ADMIN.getValue(), sysUser.getNickName(), null));
         }
         return R.fail(ResultCode.FAILED_LOGIN);
     }

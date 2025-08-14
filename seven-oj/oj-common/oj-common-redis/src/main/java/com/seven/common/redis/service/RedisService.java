@@ -102,6 +102,33 @@ public class RedisService {
         }
         return JSON.parseObject(String.valueOf(t), clazz);
     }
+
+    public <T> List<T> multiGet(final List<String> keyList, Class<T> clazz) {
+        List list = redisTemplate.opsForValue().multiGet(keyList);
+        if (list == null || list.size() <= 0) {
+            return null;
+        }
+        List<T> result = new ArrayList<>();
+        for (Object o : list) {
+            result.add(JSON.parseObject(String.valueOf(o), clazz));
+        }
+        return result;
+    }
+
+    public <K, V> void multiSet(Map<? extends K, ? extends V> map) {
+        redisTemplate.opsForValue().multiSet(map);
+    }
+
+
+    /**
+     *计数加一
+     *
+     * @param key
+     * @return
+     */
+    public Long increment(final String key) {
+        return redisTemplate.opsForValue().increment(key);
+    }
     //*************** 操作list结构 ****************
     /**
      * 获取list中存储数据数量

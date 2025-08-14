@@ -23,7 +23,7 @@ const router = createRouter({
           name: 'question',
           component: () => import('@/views/Question.vue')
         },
-        {
+        { 
           path: 'cuser',
           name: 'cuser',
           component: () => import('@/views/Cuser.vue')
@@ -36,7 +36,7 @@ const router = createRouter({
         {
           path: 'updateExam',
           name: 'updateExam',
-          component: () => import('@/views/updateExam.vue')
+          component: () => import('@/views/UpdateExam.vue')
         },
       ]
     },
@@ -47,7 +47,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if(getToken()) {
     if(to.path === '/oj/login') {
-      next({ path: '/oj/layout' })
+      next({ path: '/oj/layout/question' })
     } else {
       next()
     }
