@@ -11,7 +11,7 @@
             te.end_time
         FROM
             tb_exam te
-        where
+        WHERE
             status = 1
             <if test="title != null and title != '' ">
                 AND te.title LIKE CONCAT('%', #{title}, '%')

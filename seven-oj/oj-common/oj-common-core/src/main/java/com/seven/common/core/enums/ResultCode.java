@@ -38,7 +38,20 @@ public enum ResultCode {
     EXAM_QUESTION_NOT_EXISTS (3204, "为竞赛新增的题目不存在"),
     EXAM_STARTED(3205, "竞赛已经开始, 无法进行操作"),
     EXAM_NOT_HAS_QUESTION(3206, "竞赛当中不包含题目"),
-    EXAM_IS_FINISH(3207, "竞赛已经结束不能进行操作");
+    EXAM_IS_FINISH(3207, "竞赛已经结束不能进行操作"),
+    EXAM_IS_PUBLISH(3208, "竞赛已经发布不能进行操作"),
+
+    USER_EXAM_HAS_ENTER(3301, "用户已经报名过该竞赛"),
+
+    FAILED_FILE_UPLOAD(3401, "文件上传失败"),
+    FAILED_FILE_UPLOAD_TIME_LIMIT(3402, "当天上传图片数量超过上限"),
+
+    FAILED_FIRST_QUESTION(3501, "当前题目已经是第一题了哦"),
+    FAILED_LAST_QUESTION(3502, "当前题目已经是最后一题了哦"),
+
+    FAILED_NOT_SUPPORT_PROGRAM(3601, "当前不支持此语言"),
+
+    FAILED_RABBIT_PRODUCE(3701, "mq生产者消息异常");
 
     private int code;
 

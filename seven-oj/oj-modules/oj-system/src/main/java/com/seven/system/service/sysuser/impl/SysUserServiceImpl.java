@@ -3,6 +3,7 @@ package com.seven.system.service.sysuser.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.seven.common.core.constants.Constants;
 import com.seven.common.core.constants.HttpConstants;
 import com.seven.common.core.domain.LoginUser;
 import com.seven.common.core.domain.R;
@@ -68,6 +69,7 @@ public class SysUserServiceImpl implements ISysUserService {
         SysUser sysUser = new SysUser();
         sysUser.setUserAccount(sysUserSaveDTO.getUserAccount());
         sysUser.setPassword(BCryptUtils.encryptPassword(sysUserSaveDTO.getPassword()));
+        sysUser.setCreateBy(Constants.SYSTEM_USER_ID);
         return sysUserMapper.insert(sysUser);
     }
 

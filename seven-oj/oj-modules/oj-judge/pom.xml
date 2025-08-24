@@ -16,4 +16,25 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.seven</groupId>
+            <artifactId>oj-api</artifactId>
+            <version>${oj-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.docker-java</groupId>
+            <artifactId>docker-java</artifactId>
+            <version>${docker-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.seven</groupId>
+            <artifactId>oj-common-rabbitmq</artifactId>
+            <version>${oj-common-rabbitmq.version}</version>
+        </dependency>
+    </dependencies>
 </project>

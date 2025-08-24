@@ -68,6 +68,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
     public boolean questionAdd(ExamQuestionAddDTO examQuestionAddDTO) {
         Exam exam = getExam(examQuestionAddDTO.getExamId());
         checkExam(exam);
+        if(Constants.TRUE.equals(exam.getStatus())) {
+            throw new ServiceException(ResultCode.EXAM_IS_PUBLISH);
+        }
         Set<Long> questionIdSet = examQuestionAddDTO.getQuestionIdSet();
         if(CollectionUtil.isEmpty(questionIdSet)) {
             return true;
@@ -83,6 +86,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
     public int questionDelete(Long examId, Long questionId) {
         Exam exam = getExam(examId);
         checkExam(exam);
+        if(Constants.TRUE.equals(exam.getStatus())) {
+            throw new ServiceException(ResultCode.EXAM_IS_PUBLISH);
+        }
         return examQuestionMapper.delete(new LambdaQueryWrapper<ExamQuestion>()
                 .eq(ExamQuestion::getExamId, examId)
                 .eq(ExamQuestion::getQuestionId, questionId));
@@ -114,6 +120,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
     @Override
     public int edit(ExamEditDTO examEditDTO) {
         Exam exam = getExam(examEditDTO.getExamId());
+        if(Constants.TRUE.equals(exam.getStatus())) {
+            throw new ServiceException(ResultCode.EXAM_IS_PUBLISH);
+        }
         checkExam(exam);
         checkExamSaveParams(examEditDTO, examEditDTO.getExamId());
         exam.setTitle(examEditDTO.getTitle());
@@ -125,6 +134,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
     @Override
     public int delete(Long examId) {
         Exam exam = getExam(examId);
+        if(Constants.TRUE.equals(exam.getStatus())) {
+            throw new ServiceException(ResultCode.EXAM_IS_PUBLISH);
+        }
         checkExam(exam);
         examQuestionMapper.delete(new LambdaQueryWrapper<ExamQuestion>()
                 .eq(ExamQuestion::getExamId, examId));
@@ -137,7 +149,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamQuestionMapper, ExamQuestio
         if(exam.getEndTime().isBefore(LocalDateTime.now())) {
             throw new ServiceException(ResultCode.EXAM_IS_FINISH);
         }
-        Long count = examQuestionMapper.selectCount(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, examId));
+        Long count = examQuestionMapper.selectCount(new LambdaQueryWrapper<ExamQuestion>()
+                .eq(ExamQuestion::getExamId, examId));
         if(count == null || count <= 0) {
             throw new ServiceException(ResultCode.EXAM_NOT_HAS_QUESTION);
         }

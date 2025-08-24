@@ -38,7 +38,7 @@ async function loginFun() {
     try {
         const loginResult = await loginService(userAccount.value, password.value)
         console.log("loginResult:", loginResult)
-        router.push("/oj/layout")
+        router.push("/oj/layout/question")
         setToken(loginResult.data)
     }
     catch (error) {

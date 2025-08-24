@@ -7,6 +7,8 @@ import com.seven.common.core.domain.R;
 import com.seven.common.core.domain.vo.LoginUserVO;
 import com.seven.friend.domain.user.dto.UserCodeDTO;
 import com.seven.friend.domain.user.dto.UserLoginDTO;
+import com.seven.friend.domain.user.dto.UserUpdateDTO;
+import com.seven.friend.domain.user.vo.UserVO;
 import com.seven.friend.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,5 +37,20 @@ public class UserController extends BaseController {
     @GetMapping("/info")
     public R<LoginUserVO> info(@RequestHeader(HttpConstants.AUTHENTICATION) String token) {
         return userService.info(token);
+    }
+
+    @GetMapping("/detail")
+    public R<UserVO> detail() {
+        return R.ok(userService.detail());
+    }
+
+    @PutMapping("/edit")
+    public R<Void> edit(@RequestBody UserUpdateDTO userUpdateDTO) {
+        return toR(userService.edit(userUpdateDTO));
+    }
+
+    @PutMapping("/head-image/update")
+    public R<Void> updateHeadImage(@RequestBody UserUpdateDTO userUpdateDTO) {
+        return toR(userService.updateHeadImage(userUpdateDTO));
     }
 }

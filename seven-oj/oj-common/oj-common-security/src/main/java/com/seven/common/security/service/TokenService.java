@@ -38,8 +38,8 @@ public class TokenService {
         return token;
     }
 
-    public void extendToken(String token, String secret) {
-        String userKey = getUserKey(token, secret); //获取jwt中的key
+    public void extendToken(Claims claims) {
+        String userKey = getUserKey(claims); //获取jwt中的key
         if(userKey == null) {
             return;
         }
@@ -72,7 +72,23 @@ public class TokenService {
         return redisService.deleteObject(getTokenKey(userKey));
     }
 
-    private String getUserKey(String token, String secret) {
+    public Long getUserId(Claims claims) {
+        if (claims == null) return null;
+        return Long.valueOf(JwtUtils.getUserId(claims)); //获取jwt中的key
+    }
+
+    public String getUserKey(Claims claims) {
+        if (claims == null) return null;
+        return JwtUtils.getUserKey(claims); //获取jwt中的key
+    }
+
+    public String getUserKey(String token, String secret) {
+        Claims claims = getClaims(token, secret);
+        if (claims == null) return null;
+        return JwtUtils.getUserKey(claims); //获取jwt中的key
+    }
+
+    public Claims getClaims(String token, String secret) {
         Claims claims;
         try {
             claims = JwtUtils.parseToken(token, secret); //获取令牌中信息 解析payload中信息
@@ -84,8 +100,14 @@ public class TokenService {
             log.error("解析token:{}, 出现异常:{}", token, e);
             return null;
         }
-        return JwtUtils.getUserKey(claims); //获取jwt中的key
+        return claims;
     }
 
-
+    public void refreshLoginUser(String nickName, String headImage, String userKey) {
+        String tokenKey = getTokenKey(userKey);
+        LoginUser loginUser = redisService.getCacheObject(tokenKey, LoginUser.class);
+        loginUser.setNickName(nickName);
+        loginUser.setHeadImage(headImage);
+        redisService.setCacheObject(tokenKey, loginUser);
+    }
 }

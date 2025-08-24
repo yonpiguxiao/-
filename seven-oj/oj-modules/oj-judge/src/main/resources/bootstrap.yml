@@ -1,5 +1,19 @@
-server:
-  port: 9204
 spring:
   application:
     name: oj-judge
+  profiles:
+    active: local
+  cloud:
+    nacos:
+      discovery:
+        namespace: 7722a33b-af83-4442-a86c-da13218101b1
+        server-addr: http://10.2.8.12:8848
+        username: nacos
+        password: nacossevenoj_8
+        ip: ${HOST_IP}
+      config:
+        namespace: 7722a33b-af83-4442-a86c-da13218101b1
+        server-addr: http://10.2.8.12:8848
+        file-extension: yaml
+        username: nacos
+        password: nacossevenoj_8

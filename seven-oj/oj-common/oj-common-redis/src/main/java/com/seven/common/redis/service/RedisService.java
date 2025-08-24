@@ -174,6 +174,15 @@ public class RedisService {
     public <T> Long removeForList(final String key, T value) {
         return redisTemplate.opsForList().remove(key, 1L, value);
     }
+
+    public <T> Long indexOfForList(final String key, T value) {
+        return redisTemplate.opsForList().indexOf(key, value);
+    }
+
+    public <T> T indexForList(final String key, long index, Class<T> clazz) {
+        Object t = redisTemplate.opsForList().index(key, index);
+        return JSON.parseObject(String.valueOf(t), clazz);
+    }
     //************************ 操作Hash类型 ***************************
     public <T> T getCacheMapValue(final String key, final String hKey,
                                   Class<T> clazz) {
@@ -224,5 +233,9 @@ public class RedisService {
     }
     public Long deleteCacheMapValue(final String key, final String hKey) {
         return redisTemplate.opsForHash().delete(key, hKey);
+    }
+
+    public Long incrementHashValue(final String key, final String hKey, long delta) {
+        return redisTemplate.opsForHash().increment(key, hKey, delta);
     }
 }
