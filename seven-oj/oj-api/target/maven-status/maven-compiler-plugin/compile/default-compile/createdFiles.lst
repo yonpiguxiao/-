@@ -1,0 +1,4 @@
+com\seven\api\domain\vo\UserQuestionResultVO.class
+com\seven\api\domain\dto\JudgeSubmitDTO.class
+com\seven\api\domain\UserExeResult.class
+com\seven\api\RemoteJudgeService.class

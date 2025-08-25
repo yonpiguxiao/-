@@ -1,0 +1,3 @@
+com\seven\common\redis\service\RedisService.class
+com\seven\common\redis\config\JsonRedisSerializer.class
+com\seven\common\redis\config\RedisConfig.class

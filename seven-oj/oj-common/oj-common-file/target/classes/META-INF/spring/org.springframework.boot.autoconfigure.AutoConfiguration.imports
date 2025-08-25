@@ -1,0 +1,4 @@
+com.seven.common.file.config.OSSConfig
+com.seven.common.file.config.OSSProperties
+com.seven.common.file.service.OSSService
+

@@ -1,0 +1,3 @@
+com\seven\gateway\filter\AuthFilter.class
+com\seven\gateway\properties\IgnoreWhiteProperties.class
+com\seven\gateway\OjGatewayApplication.class

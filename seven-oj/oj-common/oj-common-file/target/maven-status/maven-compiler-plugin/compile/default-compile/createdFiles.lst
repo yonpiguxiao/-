@@ -1,0 +1,4 @@
+com\seven\common\file\service\OSSService.class
+com\seven\common\file\config\OSSProperties.class
+com\seven\common\file\domain\OSSResult.class
+com\seven\common\file\config\OSSConfig.class
