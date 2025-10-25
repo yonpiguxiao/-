@@ -62,16 +62,26 @@
         @current-change="handleCurrentChange"
       />
     </div>
+
+    <!-- 会议室详情弹窗 -->
+    <ConferenceInfoPop ref="conferenceInfoPop" />
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import roomImage from '@/assets/images/exam.png'
+import ConferenceInfoPop from '@/views/pop/ConferenceInfoPop.vue'
 
 export default {
   name: 'Conference',
+  components: {
+    ConferenceInfoPop
+  },
   setup() {
+    // 获取子组件引用
+    const conferenceInfoPop = ref(null)
+    
     // 搜索表单数据
     const searchForm = ref({
       time: '',
@@ -85,14 +95,14 @@ export default {
 
     // 会议室数据
     const rooms = ref([
-      { id: 1, number: 'A101' },
-      { id: 2, number: 'A102' },
-      { id: 3, number: 'A103' },
-      { id: 4, number: 'A104' },
-      { id: 5, number: 'B201' },
-      { id: 6, number: 'B202' },
-      { id: 7, number: 'B203' },
-      { id: 8, number: 'B204' }
+      { id: 1, number: 'A101', address: '北京市朝阳区某某大厦A座101室' },
+      { id: 2, number: 'A102', address: '北京市朝阳区某某大厦A座102室' },
+      { id: 3, number: 'A103', address: '北京市朝阳区某某大厦A座103室' },
+      { id: 4, number: 'A104', address: '北京市朝阳区某某大厦A座104室' },
+      { id: 5, number: 'B201', address: '北京市朝阳区某某大厦B座201室' },
+      { id: 6, number: 'B202', address: '北京市朝阳区某某大厦B座202室' },
+      { id: 7, number: 'B203', address: '北京市朝阳区某某大厦B座203室' },
+      { id: 8, number: 'B204', address: '北京市朝阳区某某大厦B座204室' }
     ])
 
     // 方法
@@ -109,7 +119,13 @@ export default {
 
     const viewDetails = (room) => {
       console.log('查看会议室详情:', room)
-      // 这里可以添加查看详情的逻辑
+      // 显示弹窗
+      // 确保引用存在且有show方法
+      if (conferenceInfoPop.value && typeof conferenceInfoPop.value.show === 'function') {
+        conferenceInfoPop.value.show(room)
+      } else {
+        console.error('无法调用show方法:', conferenceInfoPop.value)
+      }
     }
 
     const reserveRoom = (room) => {
@@ -129,7 +145,13 @@ export default {
       // 这里可以添加重新加载数据的逻辑
     }
 
+    // 检查组件是否正确挂载
+    onMounted(() => {
+      console.log('ConferenceInfoPop 组件引用:', conferenceInfoPop.value)
+    })
+
     return {
+      conferenceInfoPop,
       searchForm,
       currentPage,
       pageSize,
