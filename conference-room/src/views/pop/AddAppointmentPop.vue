@@ -21,10 +21,26 @@
         />
       </el-form-item>
       
-      <el-form-item label="时间段" prop="timePeriod">
-        <el-select v-model="form.timePeriod" placeholder="请选择预约时间段">
-          <el-option label="上午" value="上午"></el-option>
-          <el-option label="下午" value="下午"></el-option>
+      <el-form-item label="开始时间" prop="startTime">
+        <el-select v-model="form.startTime" placeholder="请选择开始时间">
+          <el-option
+            v-for="hour in 24"
+            :key="hour - 1"
+            :label="`${hour - 1}:00`"
+            :value="`${hour - 1}:00`"
+          />
+        </el-select>
+      </el-form-item>
+      
+      <el-form-item label="结束时间" prop="endTime">
+        <el-select v-model="form.endTime" placeholder="请选择结束时间" :disabled="!form.startTime">
+          <el-option
+            v-for="hour in 24"
+            :key="hour"
+            :label="`${hour}:00`"
+            :value="`${hour}:00`"
+            :disabled="hour <= parseInt(form.startTime)"
+          />
         </el-select>
       </el-form-item>
       
@@ -58,7 +74,8 @@ export default {
     // 表单数据
     const form = reactive({
       reservationDate: '',
-      timePeriod: '',
+      startTime: '9:00',
+      endTime: '10:00',
       reserverName: '',
       contactPhone: ''
     })
@@ -68,8 +85,11 @@ export default {
       reservationDate: [
         { required: true, message: '请选择预约日期', trigger: 'change' }
       ],
-      timePeriod: [
-        { required: true, message: '请选择预约时间段', trigger: 'change' }
+      startTime: [
+        { required: true, message: '请选择开始时间', trigger: 'change' }
+      ],
+      endTime: [
+        { required: true, message: '请选择结束时间', trigger: 'change' }
       ],
       reserverName: [
         { required: true, message: '请输入预约人名字', trigger: 'blur' }
@@ -103,7 +123,13 @@ export default {
     const confirm = () => {
       formRef.value.validate((valid) => {
         if (valid) {
-          console.log('预约信息:', form)
+          // 将时间段合并为一个字符串
+          const timePeriod = `${form.startTime}-${form.endTime}`;
+          const appointmentInfo = {
+            ...form,
+            timePeriod
+          };
+          console.log('预约信息:', appointmentInfo)
           // 这里可以添加提交预约的逻辑
           // 提交成功后关闭弹窗
           visible.value = false

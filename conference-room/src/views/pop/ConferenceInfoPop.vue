@@ -35,11 +35,27 @@
             value-format="YYYY-MM-DD"
           />
         </el-form-item>
-        <el-form-item label="选择时段">
-          <el-radio-group v-model="timeForm.timeSlot">
-            <el-radio label="上午">上午</el-radio>
-            <el-radio label="下午">下午</el-radio>
-          </el-radio-group>
+        <el-form-item label="开始时间">
+          <el-select v-model="timeForm.startTime" placeholder="请选择开始时间">
+            <el-option
+              v-for="hour in 24"
+              :key="hour - 1"
+              :label="`${hour - 1}:00`"
+              :value="`${hour - 1}:00`"
+            />
+          </el-select>
+        </el-form-item>
+        
+        <el-form-item label="结束时间">
+          <el-select v-model="timeForm.endTime" placeholder="请选择结束时间" :disabled="!timeForm.startTime">
+            <el-option
+              v-for="hour in 24"
+              :key="hour"
+              :label="`${hour}:00`"
+              :value="`${hour}:00`"
+              :disabled="hour <= parseInt(timeForm.startTime)"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="checkReservationStatus">查询预约状态</el-button>
@@ -86,7 +102,8 @@ export default {
     // 时间选择表单
     const timeForm = ref({
       date: '',
-      timeSlot: '上午'
+      startTime: '9:00',
+      endTime: '10:00'
     })
     
     // 预约状态（null表示未查询，true表示已预约，false表示未预约）
@@ -116,12 +133,18 @@ export default {
         return
       }
       
+      if (!timeForm.value.startTime || !timeForm.value.endTime) {
+        ElMessage.warning('请选择完整的时间段')
+        return
+      }
+      
       // 模拟查询预约状态的逻辑
       // 在实际应用中，这里应该调用后端API查询预约状态
       console.log('查询预约状态:', {
         roomId: roomData.value.id,
         date: timeForm.value.date,
-        timeSlot: timeForm.value.timeSlot
+        startTime: timeForm.value.startTime,
+        endTime: timeForm.value.endTime
       })
       
       // 模拟查询结果（随机返回已预约或未预约）
