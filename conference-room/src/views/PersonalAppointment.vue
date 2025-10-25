@@ -9,7 +9,10 @@
         :key="appointment.id" 
         class="appointment-item"
       >
-        <div class="room-info">{{ appointment.roomName }}</div>
+        <div class="room-info">
+          {{ appointment.roomName }}
+          <span class="status-tag" :class="getStatusClass(appointment.status)">{{ appointment.status }}</span>
+        </div>
         <div class="time-info">
           <span>{{ formatDateTime(appointment.date, appointment.timeSlot) }}</span>
           <button 
@@ -41,19 +44,29 @@ export default {
           id: 1,
           roomName: '会议室A',
           date: '2025-10-26',
-          timeSlot: '09:00-10:00'
+          timeSlot: '09:00-10:00',
+          status: '已通过'
         },
         {
           id: 2,
           roomName: '会议室B',
           date: '2025-10-25',
-          timeSlot: '14:00-15:00'
+          timeSlot: '14:00-15:00',
+          status: '审批中'
         },
         {
           id: 3,
           roomName: '会议室C',
           date: '2025-10-27',
-          timeSlot: '11:00-12:00'
+          timeSlot: '11:00-12:00',
+          status: '未通过'
+        },
+        {
+          id: 4,
+          roomName: '会议室D',
+          date: '2025-10-24',
+          timeSlot: '09:00-11:00',
+          status: '已过期'
         }
       ]
     }
@@ -85,22 +98,35 @@ export default {
      * 格式化日期时间显示
      * @param {string} date - 'YYYY-MM-DD'
      * @param {string} timeSlot - 'HH:MM-HH:MM'
-     * @returns {string} - 'YYYY年MM月DD日 上午/下午'
+     * @returns {string} - 'YYYY年MM月DD日 HH:MM-HH:MM'
      */
     formatDateTime(date, timeSlot) {
       // 解析日期
       const [year, month, day] = date.split('-');
       
-      // 解析时间段获取开始时间
-      const startTime = timeSlot.split('-')[0];
-      const [startHour] = startTime.split(':').map(Number);
-      
-      // 判断上午/下午
-      const period = startHour < 12 ? '上午' : '下午';
-      
-      return `${year}年${month}月${day}日 ${period}`;
+      return `${year}年${month}月${day}日 ${timeSlot}`;
     },
     
+    /**
+     * 获取状态标签的样式类
+     * @param {string} status - 预约状态
+     * @returns {string} - 样式类名
+     */
+    getStatusClass(status) {
+      switch (status) {
+        case '已通过':
+          return 'status-approved';
+        case '审批中':
+          return 'status-pending';
+        case '未通过':
+          return 'status-rejected';
+        case '已过期':
+          return 'status-expired';
+        default:
+          return '';
+      }
+    },
+
     /**
      * 取消预约
      * @param {number} id - 预约ID
@@ -178,5 +204,39 @@ export default {
   color: #999;
   font-size: 16px;
   padding: 30px 0;
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+.status-approved {
+  background-color: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
+}
+
+.status-pending {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
+}
+
+.status-rejected {
+  background-color: #fff2f0;
+  color: #ff4d4f;
+  border: 1px solid #ffccc7;
+}
+
+.status-expired {
+  background-color: #f9f9f9;
+  color: #bfbfbf;
+  border: 1px solid #d9d9d9;
 }
 </style>
