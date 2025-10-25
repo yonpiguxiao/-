@@ -25,7 +25,7 @@ import Navbar from '@/components/Navbar.vue'
     //position: fixed;
 
 
-    .conference-main-layout-header {
+.conference-main-layout-header {
         height: 60px;
         position: absolute;
         width: 100%;
@@ -33,7 +33,7 @@ import Navbar from '@/components/Navbar.vue'
         left: 0;
         top: 0;
         z-index: 3;
-        overflow: hidden;
+        overflow: visible;
     }
     
     .conference-main-layout-nav {

@@ -13,6 +13,7 @@
       <span class="user-name">测试用户</span>
       <div v-if="showDropdown" class="dropdown-menu">
         <router-link to="/login" class="dropdown-item">登录</router-link>
+        <a href="#" class="dropdown-item" @click.prevent="logout">退出登录</a>
       </div>
     </div>
   </div>
@@ -20,9 +21,19 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import headImage from '@/assets/images/head_image.png'
 
 const showDropdown = ref(false)
+const router = useRouter()
+
+const logout = () => {
+  // 在实际应用中，这里会清除用户的认证状态
+  // 例如：localStorage.removeItem('token')
+  
+  // 跳转到登录页面
+  router.push('/login')
+}
 </script>
 
 <style scoped>

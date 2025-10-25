@@ -9,7 +9,13 @@
     <div class="search-area">
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
         <el-form-item label="预约时间">
-          <el-input v-model="searchForm.time" placeholder="请输入预约时间" />
+          <el-date-picker
+            v-model="searchForm.time"
+            type="date"
+            placeholder="请选择预约日期"
+            format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD"
+          />
         </el-form-item>
         <el-form-item label="会议室房间号">
           <el-input v-model="searchForm.roomNumber" placeholder="请输入预约室房间号" />
@@ -24,7 +30,7 @@
     <!-- 会议室列表 -->
     <div class="room-list">
       <el-row :gutter="20">
-        <el-col :span="6" v-for="room in rooms" :key="room.id" class="room-item-col">
+        <el-col :span="4" v-for="room in rooms" :key="room.id" class="room-item-col">
           <el-card class="room-item">
             <div class="room-image">
               <img :src="roomImage" alt="会议室图片" />
@@ -147,7 +153,7 @@ export default {
 }
 
 .header h1 {
-  margin-bottom: 20px;
+  margin-top: 40px;
   color: #333;
 }
 
