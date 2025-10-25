@@ -65,22 +65,31 @@
 
     <!-- 会议室详情弹窗 -->
     <ConferenceInfoPop ref="conferenceInfoPop" />
+    
+    <!-- 预约弹窗 -->
+    <AddAppointmentPop ref="addAppointmentPop" />
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick, getCurrentInstance } from 'vue'
 import roomImage from '@/assets/images/exam.png'
 import ConferenceInfoPop from '@/views/pop/ConferenceInfoPop.vue'
+import AddAppointmentPop from '@/views/pop/AddAppointmentPop.vue'
 
 export default {
   name: 'Conference',
   components: {
-    ConferenceInfoPop
+    ConferenceInfoPop,
+    AddAppointmentPop
   },
   setup() {
+    // 获取当前实例
+    const instance = getCurrentInstance()
+    
     // 获取子组件引用
     const conferenceInfoPop = ref(null)
+    const addAppointmentPop = ref(null)
     
     // 搜索表单数据
     const searchForm = ref({
@@ -130,7 +139,16 @@ export default {
 
     const reserveRoom = (room) => {
       console.log('预约会议室:', room)
-      // 这里可以添加预约的逻辑
+      // 显示预约弹窗
+      nextTick(() => {
+        if (addAppointmentPop.value && typeof addAppointmentPop.value.show === 'function') {
+          addAppointmentPop.value.show()
+        } else if (instance.refs.addAppointmentPop && typeof instance.refs.addAppointmentPop.show === 'function') {
+          instance.refs.addAppointmentPop.show()
+        } else {
+          console.error('无法调用预约弹窗的show方法:', addAppointmentPop.value)
+        }
+      })
     }
 
     const handleSizeChange = (val) => {
