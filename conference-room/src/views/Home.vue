@@ -29,7 +29,7 @@ import Navbar from '@/components/Navbar.vue'
         height: 60px;
         position: absolute;
         width: 100%;
-        background: #fff;
+        background: #409eff;
         left: 0;
         top: 0;
         z-index: 3;
