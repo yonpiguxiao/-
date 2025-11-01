@@ -8,14 +8,6 @@
     <!-- 搜索区域 -->
     <div class="search-container">
       <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="预约时间">
-          <el-date-picker
-            v-model="searchForm.appointmentTime"
-            type="date"
-            placeholder="请选择预约时间"
-            value-format="YYYY-MM-DD"
-          />
-        </el-form-item>
         <el-form-item label="房间号">
           <el-input
             v-model="searchForm.roomNumber"
@@ -90,7 +82,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import examImage from '@/assets/images/exam.png'
+
+const router = useRouter()
 
 // 搜索表单数据
 const searchForm = ref({
@@ -142,13 +137,13 @@ const handleReset = () => {
 // 新增功能
 const handleAdd = () => {
   console.log('新增会议室')
-  // 这里应该跳转到新增页面或打开新增对话框
+  router.push({ name: 'update-conference', query: { mode: 'add' } })
 }
 
 // 编辑功能
 const handleEdit = (row) => {
   console.log('编辑会议室:', row)
-  // 这里应该跳转到编辑页面或打开编辑对话框
+  router.push({ name: 'update-conference', query: { mode: 'edit', id: row.id }, state: { conferenceData: row } })
 }
 
 // 删除功能
