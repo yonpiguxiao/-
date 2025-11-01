@@ -22,6 +22,11 @@ const router = createRouter({
           name: 'conference',
           component: () => import('@/views/Conference.vue'),
         },
+        {
+          path: 'update-conference',
+          name: 'update-conference',
+          component: () => import('@/views/UpdateConference.vue'),
+        },
       ]
     },
     {

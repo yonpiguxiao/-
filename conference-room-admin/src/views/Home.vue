@@ -1,48 +1,37 @@
 <template>
-    <div class="conference-main-layout">
-        <div class="conference-main-layout-header">
-            <div class="conference-main-layout-nav">
-                <Navbar></Navbar>
-            </div>
-        </div>
+  <div class="home-container">
+    <div class="navbar-container">
+      <Navbar />
     </div>
-    <RouterView />
+    <div class="content-container">
+      <RouterView />
+    </div>
+  </div>
 </template>
+
 <script setup>
 import Navbar from '@/components/Navbar.vue'
 </script>
-<style lang="scss" scoped>
-.el-main {
-    padding: 0;
 
+<style lang="scss" scoped>
+.home-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
-.conference-main-layout {
-    padding-top: 20px;
-    background-color: #f7f7f7;
-    width: 100%;
-    height: 100%;
-    //position: fixed;
+.navbar-container {
+  flex-shrink: 0;
+  height: 60px;
+  background: #409eff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
 
-
-.conference-main-layout-header {
-        height: 60px;
-        position: absolute;
-        width: 100%;
-        background: #409eff;
-        left: 0;
-        top: 0;
-        z-index: 3;
-        overflow: visible;
-    }
-    
-    .conference-main-layout-nav {
-        max-width: 1520px;
-        min-width: 100%;
-        margin: 0 auto;
-        height: 60px;
-        background: #fff;
-    }
-
+.content-container {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+  background-color: #f7f7f7;
 }
 </style>

@@ -2,10 +2,10 @@
   <div class="navbar">
     <div class="nav-links">
       <router-link to="/home/conference" class="nav-link" active-class="active">
-        会议室预约
+        会议室管理
       </router-link>
-      <router-link to="/home/personal-appointment" class="nav-link" active-class="active">
-        个人预约
+      <router-link to="/home/appointment" class="nav-link" active-class="active">
+        预约管理
       </router-link>
     </div>
     <div class="user-info" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
