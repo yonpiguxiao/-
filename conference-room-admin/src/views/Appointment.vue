@@ -32,17 +32,27 @@
           </div>
         </div>
         
-        <!-- 审批按钮（仅对未审批的预约显示） -->
-        <div v-if="appointment.status === '未审批'" class="approval-button">
-          <el-button type="primary" size="small">审批</el-button>
-        </div>
+    <!-- 审批按钮（仅对未审批的预约显示） -->
+    <div v-if="appointment.status === '未审批'" class="approval-button">
+      <el-button type="primary" size="small" @click="openApprovalDialog(appointment)">审批</el-button>
+    </div>
       </div>
     </div>
   </div>
+  
+  <!-- 审批预约弹窗 -->
+  <ApproveAppointmentPop v-model:visible="approvalDialogVisible" @confirm="handleApprovalConfirm" />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import ApproveAppointmentPop from './ApproveAppointmentPop.vue'
+
+// 控制审批弹窗显示
+const approvalDialogVisible = ref(false)
+
+// 当前正在审批的预约
+const currentAppointment = ref(null)
 
 // 预约列表数据
 const appointmentList = ref([
@@ -97,6 +107,31 @@ const getStatusClass = (status) => {
     default:
       return ''
   }
+}
+
+// 打开审批弹窗
+const openApprovalDialog = (appointment) => {
+  currentAppointment.value = appointment
+  approvalDialogVisible.value = true
+}
+
+// 处理审批确认
+const handleApprovalConfirm = (approvalData) => {
+  console.log('审批结果:', approvalData)
+  console.log('被审批的预约:', currentAppointment.value)
+  
+  // 这里应该调用API提交审批结果
+  // 更新预约列表中的状态
+  if (currentAppointment.value) {
+    if (approvalData.approvalResult === 'agree') {
+      currentAppointment.value.status = '预约已使用'
+    } else if (approvalData.approvalResult === 'reject') {
+      currentAppointment.value.status = '已取消'
+    }
+  }
+  
+  // 显示成功消息
+  ElMessage.success('审批成功')
 }
 
 // 组件挂载时获取数据
